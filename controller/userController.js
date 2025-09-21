@@ -45,7 +45,7 @@ class userController {
             if(user) {
                 myRes.generateResponseTrue(res, 'Usuario Encontrado', user);
             } else {
-                myRes.generateResponseFalse(res, 'No se encontró al usuario', 'No se pudo encontrar al usuario porque: ', 500, err);
+                myRes.generateResponseFalse(res, 'No se encontró al usuario', 'No se pudo encontrar al usuario porque: ', 404, err);
             }
         } catch (err) {
             myRes.generateResponseFalse(res, 'No se pudo encontrar al usuario', 'No se pudo encontrar al usuario porque: ', 500, err);
@@ -65,7 +65,7 @@ class userController {
                     myRes.generateResponseFalse(res, 'Usuario no encotrado, probablemente ya haya sido eliminado anteriormente. Te recomendamos buscarlo con GET', 'No se encontró al usuario', 404);
                 }
             } else {
-                myRes.generateResponseFalse(res, 'El id propocionado no es válido, debe contener 24 caracteres', 'El id propocionado no es válido', 500);
+                myRes.invalidId(res);
             }
             
         } catch (err) {
@@ -92,7 +92,7 @@ class userController {
                     }
                 }
             } else {
-                myRes.generateResponseFalse(res, 'El id propocionado no es válido, debe contener 24 caracteres', 'El id propocionado no es válido', 500);
+                myRes.invalidId(res);
             }
         } catch (err) {
             myRes.generateResponseFalse(res, 'No se pudo actualizar al usuario', 'No se pudo actualizar al usuario porque: ', 500, err);

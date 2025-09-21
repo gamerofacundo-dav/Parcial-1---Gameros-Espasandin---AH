@@ -16,18 +16,34 @@ class foodController {
     async addFood(req, res) {
         const myRes = new Response();
        try {
-            let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, allergens, additives } = req.body;
-            if(!barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives ) {
-                myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 500);
+            let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, allergens, additives, nutritionalInfo } = req.body;
+            // Validaciones datos
+            if(!barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives || !barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein ) {
+                myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 400);
                 return;
             } 
             if (barcode.length !== 13) {
-                myRes.generateResponseFalse(res, 'El barcode debe tener 13 dígitos', 'El barcode debe tener 13 dígitos', 500);
+                myRes.generateResponseFalse(res, 'El barcode debe tener 13 dígitos', 'El barcode debe tener 13 dígitos', 400);
             }
-            ingredients = ingredients.toLowerCase().replaceAll(' ', '').split(',');
-            allergens = allergens.toLowerCase().replaceAll(' ', '').split(',');
+
+            // Conversión a string
+            if(typeof(ingredients) !== 'string') {
+                ingredients = ingredients.join();
+            }
+            if(typeof(allergens) !== 'string') {
+                allergens = allergens.join();
+            }
+
+            // Normalizando ingredientes, alergenos y nombre
+            const normalizedIngredients = ingredients.toLowerCase().replaceAll(' ', '').split(',');
+            const normalizedAllergens = allergens.toLowerCase().replaceAll(' ', '').split(',');
             normalizedName = name.replaceAll(' ', '').toLowerCase();
-            const newFood = new foodModel({ barcode, name, normalizedName, ingredients, traces: traces ?? null, brand, category, origin, allergens, additives});
+
+            // Conversión a array de vuelta
+            ingredients = ingredients.split(',').map(i => i.trim());
+            allergens = allergens.split(',').map(i => i.trim());
+
+            const newFood = new foodModel({ barcode, name, normalizedName, ingredients, normalizedIngredients, traces: traces ?? null, brand, category, origin, allergens, normalizedAllergens, additives, nutritionalInfo});
             const dataSaved = await newFood.save();
             console.log(dataSaved);
             myRes.generateResponseTrue(res, 'Alimento Agregado', dataSaved);
@@ -41,7 +57,7 @@ class foodController {
         try {
             const id = req.params.id;
             if(id.length !== 24) {
-                myRes.generateResponseFalse(res, 'El id propocionado no es válido, debe contener 24 caracteres', 'El id propocionado no es válido', 500);
+                myRes.invalidId(res);
                 return;
             } else {
                 const foodById = await foodModel.findById(id);
@@ -61,20 +77,35 @@ class foodController {
         try {
             const id = req.params.id;
             if(id.length !== 24) {
-                myRes.generateResponseFalse(res, 'El id propocionado no es válido, debe contener 24 caracteres', 'El id propocionado no es válido', 500);
+                myRes.invalidId(res);
             } else {
-                let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, allergens, additives } = req.body;
-                if(!barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives ) {
+                let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, allergens, additives, nutritionalInfo } = req.body;
+                if(!barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein) {
                     myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 500);
                     return;
                 } 
                 if (barcode.length !== 13) {
                     myRes.generateResponseFalse(res, 'El barcode debe tener 13 dígitos', 'El barcode debe tener 13 dígitos', 500);
                 }
-                ingredients = ingredients.toLowerCase().replaceAll(' ', '').split(',');
-                allergens = allergens.toLowerCase().replaceAll(' ', '').split(',');
+                // Conversión a string (si no lo es), para mejor manipulación.
+                if(typeof(ingredients) !== 'string') {
+                    ingredients = ingredients.join();
+                }
+                if(typeof(allergens) !== 'string') {
+                    allergens = allergens.join();
+                }
+         
+                
+                // Normalizando ingredientes, alergenos y nombre
+                const normalizedIngredients = ingredients.toLowerCase().replaceAll(' ', '').split(',');
+                const normalizedAllergens = allergens.toLowerCase().replaceAll(' ', '').split(',');
                 normalizedName = name.replaceAll(' ', '').toLowerCase();
-                const foodToUpdate = await foodModel.findByIdAndUpdate(id, { barcode, name, normalizedName, ingredients, traces: traces ?? null, brand, category, origin, allergens, additives});
+
+                // Conversión a array de vuelta para guardado en Base de Datos
+                ingredients = ingredients.split(',').map(i => i.trim());
+                allergens = allergens.split(',').map(i => i.trim());
+
+                const foodToUpdate = await foodModel.findByIdAndUpdate(id, { barcode, name, normalizedName, ingredients, normalizedIngredients, traces: traces ?? null, brand, category, origin, allergens, normalizedAllergens, additives, nutritionalInfo});
                 if(foodToUpdate) {
                     myRes.generateResponseTrue(res, 'Alimento actualizado', foodToUpdate);
                 } else {
@@ -91,7 +122,7 @@ class foodController {
         try {
             const id = req.params.id;
             if(id.length !== 24) {
-                myRes.generateResponseFalse(res, 'El id propocionado no es válido, debe contener 24 caracteres', 'El id propocionado no es válido', 500);
+                myRes.invalidId(res);
                 return;
             } else {
                 const foodToDelete = await foodModel.findByIdAndDelete(id);
@@ -140,7 +171,7 @@ class foodController {
             const allFoods = await foodModel.find();
             let matchedFoods = [];
             for(const foods of allFoods) {
-                if(foods.ingredients.includes(ingredient)) {
+                if(foods.normalizedIngredients.includes(ingredient)) {
                     matchedFoods.push(foods);
                 }
             }
@@ -166,7 +197,7 @@ class foodController {
             const allFoods = await foodModel.find();
             let matchedFoods = [];
             for(const foods of allFoods) {
-                if(foods.allergens.includes(allergen)) {
+                if(foods.normalizedAllergens.includes(allergen)) {
                     matchedFoods.push(foods);
                 }
             }
