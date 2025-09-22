@@ -16,7 +16,7 @@ class foodController {
     async addFood(req, res) {
         const myRes = new Response();
        try {
-            let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, allergens, additives, nutritionalInfo } = req.body;
+            let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, allergens, additives, nutritionalInfo} = req.body;
             // Validaciones datos
             if(!barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives || !barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein ) {
                 myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 400);

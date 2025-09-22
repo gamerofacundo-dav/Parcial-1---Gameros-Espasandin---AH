@@ -7,6 +7,8 @@ const mySchema = new Schemma({
     email: String,
     password: String,
     allergy: String,
+    created_at: Date,
+    updated_at: Date,
 });
 
 const model = mongoose.model('User', mySchema);

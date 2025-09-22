@@ -22,7 +22,7 @@
             <h2 class=" text-2xl my-4">Probala!</h2>
             <p class="max-w-lg">Nuestra API de Alimentos es crucial para obtener información de cualquier alimento que sea de curso legal en Argentina! ¿Que tipo de información? Código de barra, ingredientes, aditivos, conservantes, calidad nutricional, y mucho más!</p>
         </section>
-        <section>
+        <section class="mb-5">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active text-black" id="user-tab" data-bs-toggle="tab" data-bs-target="#user-tab-pane" type="button" role="tab" aria-controls="user-tab-pane" aria-selected="true">Usuarios</button>
@@ -42,23 +42,23 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/users" class="text-decoration-none text-black">Probar</a>
+                        <a href="/api/users" class="text-decoration-none text-black">Obtener todos los usuarios</a>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-warning me-4">POST</span>
-                        <a href="/api/users" class="text-decoration-none text-black">Probar</a>
+                        <a href="/api/users" class="text-decoration-none text-black">Agregar usuario</a>
                         <pre>
                             {
                                 "name": "Joaquín Gomez",
                                 "email": "joaco.gom@gmail.com",
                                 "password": "AfseGF35S%&",
-                                "allergen": "Tarzamina"
+                                "allergy": "Tarzamina"
                             }
                         </pre>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/users/68c22f53bb4072dbe172dd20" class="text-decoration-none text-black">Probar - ID</a>
+                        <a href="/api/users/68d1a4b30e2d51e4907ae8f7" class="text-decoration-none text-black">Obtener usuario por ID</a>
                     </li>
                 </ul>
             </div>
@@ -66,11 +66,11 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/food" class="text-decoration-none text-black">Probar</a>
+                        <a href="/api/food" class="text-decoration-none text-black">Todos los alimentos</a>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-warning me-4">POST</span>
-                        <a href="/api/food" class="text-decoration-none text-black">Probar</a>
+                        <a href="/api/food" class="text-decoration-none text-black">Agregar alimento</a>
                         <pre>
                             {
                                 "barcode": "9876543210987",
@@ -88,21 +88,24 @@
                                     sugar: 14,
                                     protein: 3
                                 }
-
                             }
                         </pre>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/food/68c76de26be420d61bd87fc6" class="text-decoration-none text-black">Probar con ID</a>
+                        <a href="/api/food/68d1a7930e2d51e4907ae907" class="text-decoration-none text-black">Filtar alimento por ID</a>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/food/ingredient/agua" class="text-decoration-none text-black">Probar con Ingrediente</a>
+                        <a href="/api/food/ingredient/estabilizantes" class="text-decoration-none text-black">Filtrar alimento por Ingrediente</a>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/food/allergen/tartrazina" class="text-decoration-none text-black">Probar con Alérgeno</a>
+                        <a href="/api/food/allergen/trigo" class="text-decoration-none text-black">Filtrar alimento por Alérgeno</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge text-bg-success me-4">GET</span>
+                        <a href="/api/food/name/Chocolate con Leche Arcor" class="text-decoration-none text-black">Buscar alimento por Nombre</a>
                     </li>
                 </ul>
             </div>
@@ -110,15 +113,15 @@
                 <ul class="list-group p-3">
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/history" class="text-decoration-none text-black">Probar historial completo</a>
+                        <a href="/api/history" class="text-decoration-none text-black">Obtener historial completo</a>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/history/id/64fbc3d2e7a4d12345678901" class="text-decoration-none text-black">Probar historial por ID</a>
+                        <a href="/api/history/id/68d1a0ee3a8ca0e15d35eacb" class="text-decoration-none text-black">Obtener historial por ID</a>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/history/user/68c22f53bb4072dbe172dd20" class="text-decoration-none text-black">Probar historial por Usuario</a>
+                        <a href="/api/history/user/68d1a4450e2d51e4907ae8f0" class="text-decoration-none text-black">Obtener historial por Usuario</a>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-warning me-4">POST</span>
@@ -130,14 +133,6 @@
                                 "resultado": "Puedes consumir este alimento sin problemas."
                             }
                         </pre>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="badge text-bg-danger me-4">DELETE</span>
-                        <a href="/api/history/id/64fbc3d2e7a4d12345678901" class="text-decoration-none text-black">Eliminar historial por ID</a>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="badge text-bg-danger me-4">DELETE</span>
-                        <a href="/api/history/user/68c22f53bb4072dbe172dd20" class="text-decoration-none text-black">Eliminar historial por Usuario</a>
                     </li>
                 </ul>
             </div>

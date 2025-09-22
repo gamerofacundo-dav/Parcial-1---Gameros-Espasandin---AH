@@ -28,7 +28,7 @@ class userController {
             const passMan = new passManager(10);
             password = passMan.hashPassword(password);
 
-            const newUser = new userModel({ name, email, password, allergy });
+            const newUser = new userModel({ name, email, password, allergy, created_at: Date(), updated_at: null });
             const dataSaved = await newUser.save();
             console.log(dataSaved);
             myRes.generateResponseTrue(res, 'Usuario Agregado', dataSaved);
@@ -84,7 +84,7 @@ class userController {
                 } else {
                     const passMan = new passManager(10);
                     password = passMan.hashPassword(password);
-                    const userToUpdate = await userModel.findByIdAndUpdate(id, { name, password, allergy }); 
+                    const userToUpdate = await userModel.findByIdAndUpdate(id, { name, password, allergy, updated_at: Date() }); 
                     if(userToUpdate) {
                         myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', '');
                     } else {

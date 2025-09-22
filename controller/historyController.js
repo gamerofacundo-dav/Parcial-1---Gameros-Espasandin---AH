@@ -38,7 +38,7 @@ class historyController {
                 console.log("Faltan Campos");
                 return;
             }
-            const newHistory = new historyModel({ id_usuario, id_alimento, resultado });
+            const newHistory = new historyModel({ id_usuario, id_alimento, resultado, fecha: Date()});
             const savedHistory = await newHistory.save();
             myRes.generateResponseTrue(res, 'Historial agregado', savedHistory);
             console.log("Historial agregado");

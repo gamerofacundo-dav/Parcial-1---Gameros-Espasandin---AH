@@ -20,7 +20,7 @@ const mySchema = new Schema({
         fat: Number,
         sugar: Number,
         protein: Number
-    } 
+    }
 });
 
 const model = mongoose.model('Food', mySchema);
