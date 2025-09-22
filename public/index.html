@@ -31,7 +31,7 @@
                     <button class="nav-link text-black" id="food-tab" data-bs-toggle="tab" data-bs-target="#food-tab-pane" type="button" role="tab" aria-controls="food-tab-pane" aria-selected="false">Alimentos</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link text-black" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Contact</button>
+                    <button class="nav-link text-black" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial-tab-pane" type="button" role="tab" aria-controls="historial-tab-pane" aria-selected="false">Historial</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false" disabled>Disabled</button>
@@ -106,7 +106,42 @@
                     </li>
                 </ul>
             </div>
-            <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">Reclamo este espacio</div>
+            <div class="tab-pane fade" id="historial-tab-pane" role="tabpanel" aria-labelledby="historial-tab" tabindex="0">
+                <ul class="list-group p-3">
+                    <li class="list-group-item">
+                        <span class="badge text-bg-success me-4">GET</span>
+                        <a href="/api/history" class="text-decoration-none text-black">Probar historial completo</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge text-bg-success me-4">GET</span>
+                        <a href="/api/history/64fbc3d2e7a4d12345678901" class="text-decoration-none text-black">Probar historial por ID</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge text-bg-success me-4">GET</span>
+                        <a href="/api/history/user/68c22f53bb4072dbe172dd20" class="text-decoration-none text-black">Probar historial por Usuario</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge text-bg-warning me-4">POST</span>
+                        <a href="/api/history" class="text-decoration-none text-black">Agregar historial</a>
+                        <pre>
+                            {
+                                "id_usuario": "68c22f53bb4072dbe172dd20",
+                                "id_alimento": "68c76de26be420d61bd87fc6",
+                                "fecha": "2025-09-22T20:00:00.000Z",
+                                "resultado": "Puedes consumir este alimento sin problemas."
+                            }
+                        </pre>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge text-bg-danger me-4">DELETE</span>
+                        <a href="/api/history/64fbc3d2e7a4d12345678901" class="text-decoration-none text-black">Eliminar historial por ID</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge text-bg-danger me-4">DELETE</span>
+                        <a href="/api/history/user/68c22f53bb4072dbe172dd20" class="text-decoration-none text-black">Eliminar historial por Usuario</a>
+                    </li>
+                </ul>
+            </div>
             <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
             </div>
         </section>
