@@ -31,17 +31,21 @@ class historyController {
     async addHistory(req, res) {
         const myRes = new Response();
         try {
-            let { id_usuario, id_alimento, fecha, resultado } = req.body;
-            if(!id_usuario || !id_alimento || !fecha || !resultado) {
+            let { id_usuario, id_alimento, resultado } = req.body;
+            if(!id_usuario || !id_alimento || !resultado) {
                 myRes.generateResponseFalse(res, 'Faltan Campos', 'Todos los campos son obligatorios', 400);
+                
+                console.log("Faltan Campos");
                 return;
             }
-            const newHistory = new historyModel({ id_usuario, id_alimento, fecha, resultado });
+            const newHistory = new historyModel({ id_usuario, id_alimento, resultado });
             const savedHistory = await newHistory.save();
             myRes.generateResponseTrue(res, 'Historial agregado', savedHistory);
+            console.log("Historial agregado");
         }
         catch (err) {
             myRes.generateResponseFalse(res, 'No se pudo agregar el historial', 'Error al guardar el historial', 500, err);
+            console.log("Error al guardar el historial");
         }
     }
 
@@ -67,7 +71,7 @@ class historyController {
     async deleteHistoryById(req, res) { 
         const myRes = new Response();
         try {
-            const id = req.params;
+            const {id} = req.params;
             const deletedhistory = await historyModel.findByIdAndDelete(id);
             if(deletedhistory) {
                 myRes.generateResponseTrue(res, 'Historial eliminado', deletedhistory);
