@@ -6,9 +6,9 @@ const newHistoryController = new historyController();
 
 router.post('/', newHistoryController.addHistory);
 router.get('/', newHistoryController.getHistory);
-router.get('/:id', newHistoryController.getHistoryById);
+router.get('/id/:id', newHistoryController.getHistoryById);
 router.get('/user/:id_usuario', newHistoryController.getHistoryByUserId);
-router.delete('/:id', newHistoryController.deleteHistoryById);
+router.delete('/id/:id', newHistoryController.deleteHistoryById);
 router.delete('/user/:id_usuario', newHistoryController.deleteHistoryByUserId);
 
 export default router;
