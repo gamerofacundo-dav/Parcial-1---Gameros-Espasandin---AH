@@ -100,6 +100,7 @@ class intolerancesController{
             const id = req.params.id;
             if (id.length !== 24) {
                 response.invalidId(res);
+                return;
             }else{
                 let { name, normalizedName, description, type, normalizedType, symptoms, severity, normalizedSeverity, restrictedIngredients, alternativesIngredients } = req.body;
 
@@ -222,6 +223,7 @@ class intolerancesController{
             const id = req.params.id;
             if (id.length !== 24) {
                 response.invalidId(res);
+                return;
             }else{
                 const intoleranceById = await intolerancesModel.findById(id);
                 if (!intoleranceById) {

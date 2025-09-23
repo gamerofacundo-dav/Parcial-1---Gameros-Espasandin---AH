@@ -79,6 +79,7 @@ class foodController {
             const id = req.params.id;
             if(id.length !== 24) {
                 myRes.invalidId(res);
+                return;
             } else {
                 let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, allergens, additives, nutritionalInfo } = req.body;
                 if(!barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein) {
@@ -179,7 +180,7 @@ class foodController {
             if(matchedFoods.length != 0) {
                 myRes.generateResponseTrue(res, 'Alimento encontrado', matchedFoods);
             } else {
-                myRes.generateResponseFalse(res, 'Ningúin alimento coincide con ese ingrediente', 'Ningúin alimento coincide con ese ingrediente', 500);
+                myRes.generateResponseFalse(res, 'Ningúin alimento coincide con ese ingrediente', 'Ningúin alimento coincide con ese ingrediente', 404);
             }
         } catch (err) {
             myRes.generateResponseFalse(res, 'No se pudo encontrar el alimento', 'No se pudo encontrar el Alimento porque', 500, err);
