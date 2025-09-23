@@ -13,7 +13,7 @@
     <header class="bg-red-700 p-4">
         <h1 class=" text-4xl  text-center text-white">API Alimentos</h1>  
     </header>
-    <section class="bg-red-300 flex flex-col items-center">
+    <section class="bg-red-300 p-3 flex flex-col items-center">
         <h2>Conocé la nueva API de alimentos</h2>
         <p>Desde 2025</p>
     </section>
@@ -34,7 +34,7 @@
                     <button class="nav-link text-black" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial-tab-pane" type="button" role="tab" aria-controls="historial-tab-pane" aria-selected="false">Historial</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false" disabled>Disabled</button>
+                    <button class="nav-link text-black" id="intolerances-tab" data-bs-toggle="tab" data-bs-target="#intolerances-tab-pane" type="button" role="tab" aria-controls="intolerances-tab-pane" aria-selected="false">Intolerancias</button>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -136,7 +136,36 @@
                     </li>
                 </ul>
             </div>
-            <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
+            <div class="tab-pane fade" id="intolerances-tab-pane" role="tabpanel" aria-labelledby="intolerances-tab" tabindex="0">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="badge text-bg-success me-4">GET</span>
+                        <a href="/api/intolerances" class="text-decoration-none text-black">Todos las intolerancias</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge text-bg-success me-4">GET</span>
+                        <a href="/api/intolerances/68d1e3438155fa89fc8d4202" class="text-decoration-none text-black">Filtar intolerancia por ID</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge text-bg-success me-4">GET</span>
+                        <a href="/api/intolerances/name/Intolerancia a la Lactosa" class="text-decoration-none text-black">Filtrar intolerancia por nombre</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge text-bg-warning me-4">POST</span>
+                        <a href="/api/intolerances" class="text-decoration-none text-black">Agregar intolerancia</a>
+                        <pre>
+                            {
+                                "name": "Intolerancia a la lactosa",
+                                "description": "Dificultad para digerir la lactosa presente en productos lácteos.",
+                                "type": 1,
+                                "symptoms": ["Distensión abdominal", "Diarrea", "Gases", "Dolor abdominal"],
+                                "severity": 2,
+                                "restrictedIngredients": ["Leche de vaca", "Queso fresco", "Yogur"],
+                                "alternativesIngredients": ["Leche de almendra", "Leche de soja", "Queso vegano"]          
+                            }
+                        </pre>
+                    </li>
+                </ul>
             </div>
         </section>
     </main>
