@@ -24,6 +24,7 @@ class foodController {
             } 
             if (barcode.length !== 13) {
                 myRes.generateResponseFalse(res, 'El barcode debe tener 13 dígitos', 'El barcode debe tener 13 dígitos', 400);
+                return;
             }
 
             // Conversión a string

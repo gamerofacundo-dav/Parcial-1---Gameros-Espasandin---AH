@@ -39,17 +39,22 @@ class intolerancesController{
             }
 
             //Normalizo y valido el campo severity
-            if(severity === 1) {
-                normalizedSeverity = "leve";
-            } else if(severity === 2) {
-                normalizedSeverity = "moderado";
-            } else if(severity === 3) {
-                normalizedSeverity = "severo";
-            } else if(severity === 4) {
-                normalizedSeverity = "muy severo";
-            } else {
-                response.generateResponseFalse(res, "El campo severity debe ser 1 (leve), 2 (moderado), 3 (severo) o 4 (muy severo)", "El campo severity debe ser 1 (leve), 2 (moderado), 3 (severo) o 4 (muy severo)", 400);
-                return;
+            switch(severity) {
+                case 1:
+                    normalizedSeverity = "leve";
+                    break;
+                case 2:
+                    normalizedSeverity = "moderado";
+                    break;
+                case 3:
+                    normalizedSeverity = "severo";
+                    break;
+                case 4:
+                    normalizedSeverity = "muy severo";
+                    break;
+                default:
+                    response.generateResponseFalse(res, "El campo severity debe ser 1 (leve), 2 (moderado), 3 (severo) o 4 (muy severo)", "El campo severity debe ser 1 (leve), 2 (moderado), 3 (severo) o 4 (muy severo)", 400);
+                    return;
             }
 
             //Normalizo los demas campos
@@ -96,7 +101,7 @@ class intolerancesController{
             if (id.length !== 24) {
                 response.invalidId(res);
             }else{
-               let { name, description, type, symptoms, severity, restrictedIngredients, alternativesIngredients } = req.body;
+                let { name, normalizedName, description, type, normalizedType, symptoms, severity, normalizedSeverity, restrictedIngredients, alternativesIngredients } = req.body;
 
                if(!name || !description || !type || !symptoms || !severity || !restrictedIngredients || !alternativesIngredients) {
                 response.generateResponseFalse(res, "Todos los campos son requeridos", "Todos los campos son requeridos", 400);
@@ -113,11 +118,6 @@ class intolerancesController{
                 alternativesIngredients = alternativesIngredients.join();
                }
 
-               // Declaraciones previas para variables normalizadas
-               let normalizedType;
-               let normalizedSeverity;
-               let normalizedName;
-
                if(type === 1) {
                 normalizedType = "intolerancia";
                } else if(type === 2) {
@@ -127,18 +127,23 @@ class intolerancesController{
                 return;
                }
 
-               if(severity === 1) {
-                normalizedSeverity = "leve";
-               } else if(severity === 2) {
-                normalizedSeverity = "moderado";
-               } else if(severity === 3) {
-                normalizedSeverity = "severo";
-               } else if(severity === 4) {
-                normalizedSeverity = "muy severo";
-               } else {
-                response.generateResponseFalse(res, "El campo severity debe ser 1 (leve), 2 (moderado), 3 (severo) o 4 (muy severo)", "El campo severity debe ser 1 (leve), 2 (moderado), 3 (severo) o 4 (muy severo)", 400);
-                return;
-               }
+               switch(severity) {
+                case 1:
+                    normalizedSeverity = "leve";
+                    break;
+                case 2:
+                    normalizedSeverity = "moderado";
+                    break;
+                case 3:
+                    normalizedSeverity = "severo";
+                    break;
+                case 4:
+                    normalizedSeverity = "muy severo";
+                    break;
+                default:
+                    response.generateResponseFalse(res, "El campo severity debe ser 1 (leve), 2 (moderado), 3 (severo) o 4 (muy severo)", "El campo severity debe ser 1 (leve), 2 (moderado), 3 (severo) o 4 (muy severo)", 400);
+                    return;
+                }
 
                normalizedName = name.replaceAll(' ', '').toLowerCase();
                const normalizedSymptoms = symptoms.toLowerCase().replaceAll(' ', '').split(',');

@@ -39,7 +39,7 @@
             </ul>
             <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="user-tab-pane" role="tabpanel" aria-labelledby="user-tab" tabindex="0">
-                <ul class="list-group">
+                <ul class="list-group p-3">
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
                         <a href="/api/users" class="text-decoration-none text-black">Obtener todos los usuarios</a>
@@ -63,7 +63,7 @@
                 </ul>
             </div>
             <div class="tab-pane fade" id="food-tab-pane" role="tabpanel" aria-labelledby="food-tab" tabindex="0">
-                <ul class="list-group">
+                <ul class="list-group p-3">
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
                         <a href="/api/food" class="text-decoration-none text-black">Todos los alimentos</a>
@@ -81,12 +81,12 @@
                                 "category": "Postres",
                                 "origin": "Argentina",
                                 "allergens": "Leche, Tartrazina",
-                                "additives": "Colorante (tartrazina), leche en polvo"
-                                nutritionalInfo: {
-                                    calories: 88,
-                                    fat: 10,
-                                    sugar: 14,
-                                    protein: 3
+                                "additives": "Colorante (tartrazina), leche en polvo",
+                                "nutritionalInfo": {
+                                    "calories": 88,
+                                    "fat": 10,
+                                    "sugar": 14,
+                                    "protein": 3
                                 }
                             }
                         </pre>
@@ -137,7 +137,7 @@
                 </ul>
             </div>
             <div class="tab-pane fade" id="intolerances-tab-pane" role="tabpanel" aria-labelledby="intolerances-tab" tabindex="0">
-                <ul class="list-group">
+                <ul class="list-group p-3">
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
                         <a href="/api/intolerances" class="text-decoration-none text-black">Todos las intolerancias</a>
@@ -148,7 +148,7 @@
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-success me-4">GET</span>
-                        <a href="/api/intolerances/name/Intolerancia a la Lactosa" class="text-decoration-none text-black">Filtrar intolerancia por nombre</a>
+                        <a href="/api/intolerances/name/Intolerancia al gluten" class="text-decoration-none text-black">Filtrar intolerancia por nombre</a>
                     </li>
                     <li class="list-group-item">
                         <span class="badge text-bg-warning me-4">POST</span>
