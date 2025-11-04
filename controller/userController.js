@@ -1,6 +1,13 @@
 import userModel from "../model/userModel.js";
 import Response from "../classes/Response.js";
 import passManager from "../classes/passManager.js";
+import jsonwebtoken from 'jsonwebtoken'
+import dotenv from 'dotenv';
+
+dotenv.config();
+const SECRET_KEY = process.env.SECRET_KEY;
+
+console.log(SECRET_KEY, 'SECRET KEY USER')
 
 class userController {
     async getUsers(req, res) {
@@ -96,6 +103,34 @@ class userController {
             }
         } catch (err) {
             myRes.generateResponseFalse(res, 'No se pudo actualizar al usuario', 'No se pudo actualizar al usuario porque: ', 500, err);
+        }
+    }
+
+    async auth(req, res) {
+        const myRes = new Response();
+        const passwdManager = new passManager();
+        try {
+            const { email, password } = req.body;
+            const user = await userModel.findOne({email});
+            console.log(user);
+            if(!user){
+                myRes.generateResponseFalse(res, 'Usuario no encotrado', 'No se encontró al usuario', 404);
+                return;
+            }
+            const status = await passwdManager.comparePassword(password, user.password);
+            if( !status){
+                myRes.generateResponseFalse(res, 'Clave inválida', 'Clave inválida', 404);
+                return;
+            }
+            const payload = {
+                id: user._id,
+                nombre: user.name
+            }
+            const jwt = jsonwebtoken.sign( payload, SECRET_KEY, { expiresIn: '1h'} );
+            myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', jwt);
+        } catch (error) {
+            console.error(error);
+            myRes.generateResponseFalse(res, 'Error en el servidor al autenticar', 'No se pudo autenticar al usuario porque: ', 500, err);
         }
     }
 }

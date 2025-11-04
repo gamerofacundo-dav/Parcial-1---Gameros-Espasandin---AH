@@ -16,6 +16,10 @@ class passManager {
         return password;
     }
 
+    async comparePassword(password, userPassword) {
+        return await bcrypt.compare(password, userPassword);
+    }
+
 }
 
 export default passManager;
