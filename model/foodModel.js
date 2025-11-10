@@ -14,19 +14,19 @@ const mySchema = new Schema({
         trim: true,
         required: true
     },
-    name: {
+    normalizedName: {
         type: String,
         unique: true,
         trim: true,
         required: true
     },
     ingredients: {
-        type: String,
+        type: Array,
         trim: true,
         required: true
     },
     normalizedIngredients: {
-        type: String,
+        type: Array,
         trim: true,
         required: true
     },
@@ -50,12 +50,12 @@ const mySchema = new Schema({
         required: true
     },
     allergens: {
-        type: String,
+        type: Array,
         trim: true,
         required: true
     },
     normalizedAllergens: {
-        type: String,
+        type: Array,
         trim: true,
         required: true
     },
@@ -65,11 +65,12 @@ const mySchema = new Schema({
         required: true
     },
     nutritionalInfo: {
-        calories: Number,
-        fat: Number,
-        sugar: Number,
-        protein: Number
+        calories: { type: Number, default: 0 },
+        fat: { type: Number, default: 0 },
+        sugar: { type: Number, default: 0 },
+        protein: { type: Number, default: 0 }
     }
+
 });
 
 const model = mongoose.model('Food', mySchema);
