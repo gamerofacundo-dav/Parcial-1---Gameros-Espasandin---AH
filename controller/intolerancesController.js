@@ -9,10 +9,10 @@ class intolerancesController{
     async addIntolerance(req, res) {
         const response = new Response();
         try {
-            let { name, normalizedName, description, type, normalizedType, symptoms, severity, normalizedSeverity, restrictedIngredients, alternativesIngredients } = req.body;
+            let { name, normalizedName, description, type, normalizedType, symptoms, severity, normalizedSeverity, restrictedIngredients } = req.body;
 
             //Valido los campos
-            if(!name || !description || !type || !symptoms || !severity || !restrictedIngredients || !alternativesIngredients) {
+            if(!name || !description || !type || !symptoms || !severity || !restrictedIngredients) {
                 response.generateResponseFalse(res, "Todos los campos son requeridos", "Todos los campos son requeridos", 400);
                 return;
             }
@@ -23,9 +23,6 @@ class intolerancesController{
             }
             if(typeof(restrictedIngredients) !== 'string') {
                 restrictedIngredients = restrictedIngredients.join();
-            }
-            if(typeof(alternativesIngredients) !== 'string') {
-                alternativesIngredients = alternativesIngredients.join();
             }
 
             //Normalizo y valido el campo type
@@ -60,13 +57,11 @@ class intolerancesController{
             //Normalizo los demas campos
             normalizedName = name.replaceAll(' ', '').toLowerCase();
             const normalizedSymptoms = symptoms.toLowerCase().replaceAll(' ', '').split(',');
-            const normalizedRestrictedIngredients = restrictedIngredients.toLowerCase().replaceAll(' ', '').split(',');
-            const normalizedAlternativesIngredients = alternativesIngredients.toLowerCase().replaceAll(' ', '').split(',');
+            const normalizedRestrictedIngredients = restrictedIngredients.toLowerCase().replaceAll(' ', '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(',');
             
             //Paso a array nuevamente los campos
             symptoms = symptoms.split(',').map(i => i.trim());
             restrictedIngredients = restrictedIngredients.split(',').map(i => i.trim());
-            alternativesIngredients = alternativesIngredients.split(',').map(i => i.trim());
 
             const newIntolerance = new intolerancesModel({
                 name,
@@ -80,8 +75,6 @@ class intolerancesController{
                 normalizedSeverity,
                 restrictedIngredients,
                 normalizedRestrictedIngredients,
-                alternativesIngredients,
-                normalizedAlternativesIngredients,
             });
 
             const intoleranceSaved = await newIntolerance.save();
@@ -102,9 +95,9 @@ class intolerancesController{
                 response.invalidId(res);
                 return;
             }else{
-                let { name, normalizedName, description, type, normalizedType, symptoms, severity, normalizedSeverity, restrictedIngredients, alternativesIngredients } = req.body;
+                let { name, normalizedName, description, type, normalizedType, symptoms, severity, normalizedSeverity, restrictedIngredients } = req.body;
 
-               if(!name || !description || !type || !symptoms || !severity || !restrictedIngredients || !alternativesIngredients) {
+               if(!name || !description || !type || !symptoms || !severity || !restrictedIngredients) {
                 response.generateResponseFalse(res, "Todos los campos son requeridos", "Todos los campos son requeridos", 400);
                 return;
                }
@@ -115,10 +108,7 @@ class intolerancesController{
                if(typeof(restrictedIngredients) !== 'string') {
                 restrictedIngredients = restrictedIngredients.join();
                }
-               if(typeof(alternativesIngredients) !== 'string') {
-                alternativesIngredients = alternativesIngredients.join();
-               }
-
+    
                if(type === 1) {
                 normalizedType = "intolerancia";
                } else if(type === 2) {
@@ -149,11 +139,11 @@ class intolerancesController{
                normalizedName = name.replaceAll(' ', '').toLowerCase();
                const normalizedSymptoms = symptoms.toLowerCase().replaceAll(' ', '').split(',');
                const normalizedRestrictedIngredients = restrictedIngredients.toLowerCase().replaceAll(' ', '').split(',');
-               const normalizedAlternativesIngredients = alternativesIngredients.toLowerCase().replaceAll(' ', '').split(',');
+            
 
                symptoms = symptoms.split(',').map(i => i.trim());
                restrictedIngredients = restrictedIngredients.split(',').map(i => i.trim());
-               alternativesIngredients = alternativesIngredients.split(',').map(i => i.trim());
+
 
                const intoleranceUpdated = await intolerancesModel.findByIdAndUpdate(id, {
                 name,
@@ -167,8 +157,6 @@ class intolerancesController{
                 normalizedSeverity,
                 restrictedIngredients,
                 normalizedRestrictedIngredients,
-                alternativesIngredients,
-                normalizedAlternativesIngredients,
                });
 
                if(!intoleranceUpdated) {

@@ -8,7 +8,7 @@ router.get('/', foodController.getFood);
 router.get('/:id', foodController.getFoodById);
 router.get('/name/:name', foodController.getFoodByName);
 router.get('/ingredient/:ingredient', foodController.getFoodByIngredient);
-router.get('/allergen/:allergen', foodController.getFoodByAllergen);
+router.get('/allergen/:allergen', foodController.getFoodsThaDoBotContainAllergen);
 router.post('/', foodController.addFood);
 router.put('/:id', foodController.uptdateFoodById);
 router.delete('/:id', foodController.deleteFoodById);

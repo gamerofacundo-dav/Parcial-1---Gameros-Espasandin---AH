@@ -18,8 +18,6 @@ const intolerancesSchema = new mongoose.Schema({
     normalizedSeverity: String,
     restrictedIngredients: [String],
     normalizedRestrictedIngredients: [String],
-    alternativesIngredients: [String],
-    normalizedAlternativesIngredients: [String],
 });
 
 const intolerancesModel = mongoose.model("intolerances", intolerancesSchema);

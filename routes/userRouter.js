@@ -9,6 +9,7 @@ router.post('/', userController.addUser);
 router.post('/auth', userController.auth);
 router.delete('/:id', userController.deleteUserById);
 router.put('/:id', userController.updateUserById);
+router.put('/allergy/:id', userController.updateUserAllergyById);
 router.get('/:id', userController.getUserById);
 
 export default router;

@@ -16,9 +16,9 @@ class foodController {
     async addFood(req, res) {
         const myRes = new Response();
        try {
-            let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, allergens, additives, nutritionalInfo} = req.body;
+            let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, nutritionalInfo} = req.body;
             // Validaciones datos
-            if(!barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives || !barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein ) {
+            if(!barcode || !name || !ingredients || !brand || !category || !origin || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein ) {
                 myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 400);
                 return;
             } 
@@ -31,20 +31,16 @@ class foodController {
             if(typeof(ingredients) !== 'string') {
                 ingredients = ingredients.join();
             }
-            if(typeof(allergens) !== 'string') {
-                allergens = allergens.join();
-            }
 
             // Normalizando ingredientes, alergenos y nombre
-            const normalizedIngredients = ingredients.toLowerCase().replaceAll(' ', '').split(',');
-            const normalizedAllergens = allergens.toLowerCase().replaceAll(' ', '').split(',');
+            const normalizedIngredients = ingredients.toLowerCase().replaceAll(' ', '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(',');
             normalizedName = name.replaceAll(' ', '').toLowerCase();
 
             // Conversión a array de vuelta
             ingredients = ingredients.split(',').map(i => i.trim());
-            allergens = allergens.split(',').map(i => i.trim());
 
-            const newFood = new foodModel({ barcode, name, normalizedName, ingredients, normalizedIngredients, traces: traces ?? null, brand, category, origin, allergens, normalizedAllergens, additives, nutritionalInfo});
+
+            const newFood = new foodModel({ barcode, name, normalizedName, ingredients, normalizedIngredients, traces: traces ?? null, brand, category, origin, nutritionalInfo});
             const dataSaved = await newFood.save();
             console.log(dataSaved);
             myRes.generateResponseTrue(res, 'Alimento Agregado', dataSaved);
@@ -81,8 +77,8 @@ class foodController {
                 myRes.invalidId(res);
                 return;
             } else {
-                let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, allergens, additives, nutritionalInfo } = req.body;
-                if(!barcode || !name || !ingredients || !brand || !category || !origin || !allergens || !additives || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein) {
+                let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, nutritionalInfo } = req.body;
+                if(!barcode || !name || !ingredients || !brand || !category || !origin || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein) {
                     myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 500);
                     return;
                 } 
@@ -93,21 +89,18 @@ class foodController {
                 if(typeof(ingredients) !== 'string') {
                     ingredients = ingredients.join();
                 }
-                if(typeof(allergens) !== 'string') {
-                    allergens = allergens.join();
-                }
+
          
                 
                 // Normalizando ingredientes, alergenos y nombre
-                const normalizedIngredients = ingredients.toLowerCase().replaceAll(' ', '').split(',');
-                const normalizedAllergens = allergens.toLowerCase().replaceAll(' ', '').split(',');
+                const normalizedIngredients = ingredients.toLowerCase().replaceAll(' ', '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(',');
+
                 normalizedName = name.replaceAll(' ', '').toLowerCase();
 
                 // Conversión a array de vuelta para guardado en Base de Datos
                 ingredients = ingredients.split(',').map(i => i.trim());
-                allergens = allergens.split(',').map(i => i.trim());
 
-                const foodToUpdate = await foodModel.findByIdAndUpdate(id, { barcode, name, normalizedName, ingredients, normalizedIngredients, traces: traces ?? null, brand, category, origin, allergens, normalizedAllergens, additives, nutritionalInfo});
+                const foodToUpdate = await foodModel.findByIdAndUpdate(id, { barcode, name, normalizedName, ingredients, normalizedIngredients, traces: traces ?? null, brand, category, origin, nutritionalInfo});
                 if(foodToUpdate) {
                     myRes.generateResponseTrue(res, 'Alimento actualizado', foodToUpdate);
                 } else {
@@ -187,7 +180,7 @@ class foodController {
         }
     }
 
-    async getFoodByAllergen(req, res) {
+    async getFoodsThaDoBotContainAllergen(req, res) {
         const myRes = new Response();
         try {
             let allergen = req.params.allergen;
@@ -199,7 +192,7 @@ class foodController {
             const allFoods = await foodModel.find();
             let matchedFoods = [];
             for(const foods of allFoods) {
-                if(foods.normalizedAllergens.includes(allergen)) {
+                if(!foods.normalizedAllergens.includes(allergen) && matchedFoods.length < 10) {
                     matchedFoods.push(foods);
                 }
             }

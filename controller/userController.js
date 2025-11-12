@@ -13,7 +13,7 @@ class userController {
     async getUsers(req, res) {
         const myRes = new Response();
         try {
-            const users = await userModel.find();
+            const users = await userModel.find().populate('allergy');
             myRes.generateResponseTrue(res, 'Usuarios escontrados', users);
         } catch (err) {
             myRes.generateResponseFalse(res, 'Usuarios no encontrados', 'No se pudo encontrar los usuarios', 500, err);
@@ -34,6 +34,7 @@ class userController {
 
             const passMan = new passManager(10);
             password = passMan.hashPassword(password);
+            allergy = allergy.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
             const newUser = new userModel({ name, email, password, allergy, created_at: Date(), updated_at: null });
             const dataSaved = await newUser.save();
@@ -91,11 +92,39 @@ class userController {
                 } else {
                     const passMan = new passManager(10);
                     password = passMan.hashPassword(password);
+                    allergy = allergy.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
                     const userToUpdate = await userModel.findByIdAndUpdate(id, { name, password, allergy, updated_at: Date() }); 
                     if(userToUpdate) {
                         myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', '');
                     } else {
                          myRes.generateResponseFalse(res, 'Usuario no encotrado', 'No se encontró al usuario', 404);
+                    }
+                }
+            } else {
+                myRes.invalidId(res);
+            }
+        } catch (err) {
+            myRes.generateResponseFalse(res, 'No se pudo actualizar al usuario', 'No se pudo actualizar al usuario porque: ', 500, err);
+        }
+    }
+
+    async updateUserAllergyById(req, res) {
+        const myRes = new Response();
+        try {
+            const id = req.params.id;
+            let { allergy } = req.body;
+
+            console.log(id);
+            if(id.length === 24) {    
+                if(!allergy) {
+                    myRes.generateResponseFalse(res, 'Falta la alergia', 'Falta la alergia', 400);
+                } else {
+    
+                    const userToUpdate = await userModel.findByIdAndUpdate(id, { allergy, updated_at: Date() }); 
+                    if(userToUpdate) {
+                        myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', '');
+                    } else {
+                        myRes.generateResponseFalse(res, 'Usuario no encotrado', 'No se encontró al usuario', 404);
                     }
                 }
             } else {

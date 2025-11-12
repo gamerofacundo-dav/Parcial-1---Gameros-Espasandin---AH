@@ -49,21 +49,6 @@ const mySchema = new Schema({
         trim: true,
         required: true
     },
-    allergens: {
-        type: Array,
-        trim: true,
-        required: true
-    },
-    normalizedAllergens: {
-        type: Array,
-        trim: true,
-        required: true
-    },
-    additives: {
-        type: String,
-        trim: true,
-        required: true
-    },
     nutritionalInfo: {
         calories: { type: Number, default: 0 },
         fat: { type: Number, default: 0 },
