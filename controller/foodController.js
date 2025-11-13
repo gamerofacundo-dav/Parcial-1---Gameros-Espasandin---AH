@@ -181,6 +181,7 @@ class foodController {
     }
 
     async getFoodsThaDoBotContainAllergen(req, res) {
+        console.log('ASF')
         const myRes = new Response();
         try {
             let allergen = req.params.allergen;
@@ -190,14 +191,17 @@ class foodController {
                 return;
             }
             const allFoods = await foodModel.find();
+            console.log(allFoods);
             let matchedFoods = [];
             for(const foods of allFoods) {
-                if(!foods.normalizedAllergens.includes(allergen) && matchedFoods.length < 10) {
+                
+                if(!foods.normalizedIngredients.includes(allergen) && matchedFoods.length < 10) {
                     matchedFoods.push(foods);
+                    console.log(matchedFoods);
                 }
             }
             if(matchedFoods.length != 0) {
-                myRes.generateResponseTrue(res, 'Alimento encontrado', matchedFoods);
+                myRes.generateResponseTrue(res, 'Alimento encontrado', matchedFoods);   
             } else {
                 myRes.generateResponseFalse(res, 'Ningúin alimento coincide con ese alérgeno', 'Ningúin alimento coincide con ese alérgeno', 500);
             }
