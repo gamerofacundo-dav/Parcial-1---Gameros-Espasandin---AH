@@ -18,8 +18,8 @@ const auth = (req, res, next) => {
     try {
         const payload = jwt.verify(token, SECRET_KEY);
         console.log(payload);
-        const { id, name } = payload;
-        req.user = { id, name};
+        const { id, name, allergy } = payload;
+        req.user = { id, name, allergy};
         next();
     } catch (error) {
         console.log(error, 'Token invalido');

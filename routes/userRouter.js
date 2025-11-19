@@ -6,7 +6,7 @@ const userController = new UserControllerClass();
 
 router.get('/', userController.getUsers);
 router.post('/', userController.addUser);
-router.post('/auth', userController.auth);
+router.post('/auth', userController.login);
 router.delete('/:id', userController.deleteUserById);
 router.put('/:id', userController.updateUserById);
 router.put('/allergy/:id', userController.updateUserAllergyById);

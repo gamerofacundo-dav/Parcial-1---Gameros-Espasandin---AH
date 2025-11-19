@@ -113,16 +113,24 @@ class userController {
         try {
             const id = req.params.id;
             let { allergy } = req.body;
-
-            console.log(id);
             if(id.length === 24) {    
                 if(!allergy) {
                     myRes.generateResponseFalse(res, 'Falta la alergia', 'Falta la alergia', 400);
                 } else {
     
-                    const userToUpdate = await userModel.findByIdAndUpdate(id, { allergy, updated_at: Date() }); 
+                    const userToUpdate = await userModel.findByIdAndUpdate(id, { allergy, updated_at: Date() }, {new: true}); 
                     if(userToUpdate) {
-                        myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', '');
+                        const newToken = jsonwebtoken.sign(
+                            {
+                                id: userToUpdate._id,
+                                name: userToUpdate.name,
+                                allergy: userToUpdate.allergy
+                            },
+                            process.env.SECRET_KEY,
+                            { expiresIn: '7d' }
+                        )
+                        myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', newToken);
+
                     } else {
                         myRes.generateResponseFalse(res, 'Usuario no encotrado', 'No se encontró al usuario', 404);
                     }
@@ -135,7 +143,7 @@ class userController {
         }
     }
 
-    async auth(req, res) {
+    async login(req, res) {
         const myRes = new Response();
         const passwdManager = new passManager();
         try {
@@ -153,7 +161,8 @@ class userController {
             }
             const payload = {
                 id: user._id,
-                nombre: user.name
+                name: user.name,
+                allergy: user.allergy
             }
             const jwt = jsonwebtoken.sign( payload, SECRET_KEY, { expiresIn: '1h'} );
             myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', jwt);

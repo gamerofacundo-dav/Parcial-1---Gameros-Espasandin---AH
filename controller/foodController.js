@@ -186,18 +186,17 @@ class foodController {
         try {
             let allergen = req.params.allergen;
             allergen = allergen.toLowerCase().trim();
+            console.log(allergen);
             if(!allergen) {
                 myRes.generateResponseFalse(res, 'No hay un alérgeno propocionado', 'No hay un alérgeno propocionado', 500);
                 return;
             }
             const allFoods = await foodModel.find();
-            console.log(allFoods);
+        
             let matchedFoods = [];
             for(const foods of allFoods) {
-                
                 if(!foods.normalizedIngredients.includes(allergen) && matchedFoods.length < 10) {
                     matchedFoods.push(foods);
-                    console.log(matchedFoods);
                 }
             }
             if(matchedFoods.length != 0) {
