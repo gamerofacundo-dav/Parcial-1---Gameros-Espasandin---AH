@@ -1,13 +1,14 @@
 import express from "express";
 import intolerancesControllerClass from "../controller/intolerancesController.js";
 const router = express.Router();
+import auth from "../middlewares/auth.js";
 const intolerancesController = new intolerancesControllerClass();
 
-router.post("/", intolerancesController.addIntolerance);
-router.get("/:id", intolerancesController.getIntoleranceById);
+router.post("/", auth, intolerancesController.addIntolerance);
+router.get("/:id", auth, intolerancesController.getIntoleranceById);
 router.get("/", intolerancesController.getAllIntolerances);
-router.put("/:id", intolerancesController.updateIntoleranceById);
-router.delete("/:id", intolerancesController.deleteIntoleranceById);
-router.get("/name/:name", intolerancesController.getIntoleranceByName);
+router.put("/:id", auth, intolerancesController.updateIntoleranceById);
+router.delete("/:id", auth, intolerancesController.deleteIntoleranceById);
+router.get("/name/:name", auth, intolerancesController.getIntoleranceByName);
 
 export default router;
