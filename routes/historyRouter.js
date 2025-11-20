@@ -1,14 +1,15 @@
 import express from 'express';
 import historyController from '../controller/historyController.js';
+import auth from "../middlewares/auth.js";
 
 const router = express.Router();
 const newHistoryController = new historyController();
 
-router.post('/', newHistoryController.addHistory);
-router.get('/', newHistoryController.getHistory);
-router.get('/id/:id', newHistoryController.getHistoryById);
-router.get('/user/:id_usuario', newHistoryController.getHistoryByUserId);
-router.delete('/id/:id', newHistoryController.deleteHistoryById);
-router.delete('/user/:id_usuario', newHistoryController.deleteHistoryByUserId);
+router.post('/', auth, newHistoryController.addHistory);
+router.get('/', auth, newHistoryController.getHistory);
+router.get('/id/:id', auth, newHistoryController.getHistoryById);
+router.get('/user/:id_usuario', auth, newHistoryController.getHistoryByUserId);
+router.delete('/id/:id', auth, newHistoryController.deleteHistoryById);
+router.delete('/user/:id_usuario', auth, newHistoryController.deleteHistoryByUserId);
 
 export default router;

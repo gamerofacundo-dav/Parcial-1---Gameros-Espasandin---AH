@@ -1,6 +1,7 @@
 import foodModel from "../model/foodModel.js";
 import Response from "../classes/Response.js";
 import passManager from "../classes/passManager.js";
+import intolerancesModel from "../model/intolerancesModel.js";
 
 class foodController {
     async getFood(req, res) { 
@@ -132,7 +133,6 @@ class foodController {
         }
     }
 
-
     async getFoodByName(req, res) {
         const myRes = new Response();
         try {
@@ -151,6 +151,19 @@ class foodController {
             }
         } catch (err) {
             myRes.generateResponseFalse(res, 'No se pudo encontrar el alimento', 'No se pudo encontrar el Alimento porque', 500, err);
+        }
+    }
+
+    async search(req, res) {
+        const myRes = new Response();
+
+        try {
+            const { query } = req.params
+
+            // TODO... 
+            // I'm not doing this rn (Doc: https://www.mongodb.com/docs/atlas/atlas-search/)
+        } catch (err) {
+            myRes.generateResponseFalse(res, 'Algo salió mal durante la búsqueda', '[foodController search()] Failed', 500, err);
         }
     }
 
@@ -184,9 +197,9 @@ class foodController {
         console.log('ASF')
         const myRes = new Response();
         try {
-            let allergen = req.params.allergen;
-            allergen = allergen.toLowerCase().trim();
-            console.log(allergen);
+            const allergen = await intolerancesModel.findById(req.params.allergen);
+            
+            console.log(`\n\n\t[foodController getFoodsThaDoBotContainAllergen()] Allergen founded: ${allergen}`);
             if(!allergen) {
                 myRes.generateResponseFalse(res, 'No hay un alérgeno propocionado', 'No hay un alérgeno propocionado', 500);
                 return;
@@ -195,7 +208,12 @@ class foodController {
         
             let matchedFoods = [];
             for(const foods of allFoods) {
-                if(!foods.normalizedIngredients.includes(allergen) && matchedFoods.length < 10) {
+                
+                const containRestrictedIngredient = allergen.normalizedRestrictedIngredients.some(
+                    (restrictedAllergen) => foods.normalizedIngredients.includes(restrictedAllergen)
+                )
+
+                if(containRestrictedIngredient || !foods.normalizedIngredients.includes(allergen.normalizedName) && matchedFoods.length < 10) {
                     matchedFoods.push(foods);
                 }
             }

@@ -166,8 +166,8 @@ class userController {
             }
             const jwt = jsonwebtoken.sign( payload, SECRET_KEY, { expiresIn: '1h'} );
             myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', jwt);
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            console.error(err);
             myRes.generateResponseFalse(res, 'Error en el servidor al autenticar', 'No se pudo autenticar al usuario porque: ', 500, err);
         }
     }
