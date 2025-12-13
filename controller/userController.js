@@ -124,7 +124,8 @@ class userController {
                             {
                                 id: userToUpdate._id,
                                 name: userToUpdate.name,
-                                allergy: userToUpdate.allergy
+                                allergy: userToUpdate.allergy,
+                                role: userToUpdate.role
                             },
                             process.env.SECRET_KEY,
                             { expiresIn: '7d' }
@@ -162,7 +163,8 @@ class userController {
             const payload = {
                 id: user._id,
                 name: user.name,
-                allergy: user.allergy
+                allergy: user.allergy,
+                role: user.role
             }
             const jwt = jsonwebtoken.sign( payload, SECRET_KEY, { expiresIn: '1h'} );
             myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', jwt);

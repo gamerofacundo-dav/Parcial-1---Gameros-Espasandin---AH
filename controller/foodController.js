@@ -17,9 +17,9 @@ class foodController {
     async addFood(req, res) {
         const myRes = new Response();
        try {
-            let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, nutritionalInfo} = req.body;
+            let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, calories, fats, sugar, protein} = req.body;
             // Validaciones datos
-            if(!barcode || !name || !ingredients || !brand || !category || !origin || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein ) {
+            if(!barcode || !name || !ingredients || !brand || !category || !origin) {
                 myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 400);
                 return;
             } 
@@ -40,12 +40,21 @@ class foodController {
             // Conversión a array de vuelta
             ingredients = ingredients.split(',').map(i => i.trim());
 
+            // Creación objeto nutricionalInfo
+            const nutritionalInfo = {
+                calories: Number(calories) || 0,
+                fat: Number(fats) || 0,
+                sugar: Number(sugar) || 0,
+                protein: Number(protein) || 0
+            };
+
 
             const newFood = new foodModel({ barcode, name, normalizedName, ingredients, normalizedIngredients, traces: traces ?? null, brand, category, origin, nutritionalInfo});
             const dataSaved = await newFood.save();
             console.log(dataSaved);
             myRes.generateResponseTrue(res, 'Alimento Agregado', dataSaved);
         } catch (err) {
+            console.error('errir en addfood',err);
             myRes.generateResponseFalse(res, 'No se pudo guardar el Alimento', 'No se pudo guardar el Alimento porque', 500, err);
         }   
     }
@@ -78,8 +87,8 @@ class foodController {
                 myRes.invalidId(res);
                 return;
             } else {
-                let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, nutritionalInfo } = req.body;
-                if(!barcode || !name || !ingredients || !brand || !category || !origin || !nutritionalInfo.calories || !nutritionalInfo.fat || !nutritionalInfo.sugar || !nutritionalInfo.protein) {
+                let { barcode, name, normalizedName, ingredients, traces, brand, category, origin, calories, fats, sugar, protein } = req.body;
+                if(!barcode || !name || !ingredients || !brand || !category || !origin) {
                     myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 500);
                     return;
                 } 
@@ -101,7 +110,16 @@ class foodController {
                 // Conversión a array de vuelta para guardado en Base de Datos
                 ingredients = ingredients.split(',').map(i => i.trim());
 
-                const foodToUpdate = await foodModel.findByIdAndUpdate(id, { barcode, name, normalizedName, ingredients, normalizedIngredients, traces: traces ?? null, brand, category, origin, nutritionalInfo});
+                // Creación objeto nutricionalInfo
+                const nutritionalInfo = {
+                    calories: Number(calories) || 0,
+                    fat: Number(fats) || 0,
+                    sugar: Number(sugar) || 0,
+                    protein: Number(protein) || 0
+                };
+
+                const foodToUpdate = await foodModel.findByIdAndUpdate(id, { barcode, name, normalizedName, ingredients, normalizedIngredients, traces: traces ?? null, brand, category, origin, nutritionalInfo}, { new: true });
+                
                 if(foodToUpdate) {
                     myRes.generateResponseTrue(res, 'Alimento actualizado', foodToUpdate);
                 } else {
