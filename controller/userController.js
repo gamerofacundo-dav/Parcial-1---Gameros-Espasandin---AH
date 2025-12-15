@@ -90,8 +90,8 @@ class userController {
                 if(!name || !password || !allergy) {
                     myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 400);
                 } else {
-                    const passMan = new passManager(10);
-                    password = passMan.hashPassword(password);
+                    // const passMan = new passManager(10);
+                    // password = passMan.hashPassword(password);
                     allergy = allergy.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
                     const userToUpdate = await userModel.findByIdAndUpdate(id, { name, password, allergy, updated_at: Date() }); 
                     if(userToUpdate) {
