@@ -229,7 +229,7 @@ class foodController {
                 const containRestrictedIngredient = allergen.normalizedRestrictedIngredients.some(
                     (restrictedAllergen) => foods.normalizedIngredients.includes(restrictedAllergen)
                 )
-                if(!containRestrictedIngredient || !foods.normalizedIngredients.includes(allergen.normalizedName) && matchedFoods.length < 10) {
+                if(!containRestrictedIngredient && !foods.normalizedIngredients.includes(allergen.normalizedName) && matchedFoods.length < 10) {
                     matchedFoods.push(foods);
                 }
             }
