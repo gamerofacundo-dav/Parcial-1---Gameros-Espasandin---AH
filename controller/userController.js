@@ -25,7 +25,7 @@ class userController {
         const myRes = new Response();
         try {
       
-            let { name, email, password, allergy } = req.body;
+            let { name, email, role, password, allergy } = req.body;
         
             if(!name || !email || !password || !allergy) {
                 myRes.generateResponseFalse(res, 'Faltan Campos', 'Faltan Campos', 400);
@@ -36,7 +36,7 @@ class userController {
             password = passMan.hashPassword(password);
             allergy = allergy.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-            const newUser = new userModel({ name, email, password, allergy, created_at: Date(), updated_at: null });
+            const newUser = new userModel({ name, email, role, password, allergy, created_at: Date(), updated_at: null });
             const dataSaved = await newUser.save();
             console.log(dataSaved);
             myRes.generateResponseTrue(res, 'Usuario Agregado', dataSaved);
@@ -85,15 +85,15 @@ class userController {
         const myRes = new Response();
         try {
             const id = req.params.id;
-            let { name, password, allergy } = req.body;
+            let { name, email, role, password, allergy } = req.body;
             if(id.length === 24) {    
-                if(!name || !password || !allergy) {
+                if(!name || !email || !password || !allergy) {
                     myRes.generateResponseFalse(res, 'Faltan campos', 'Faltan campos', 400);
                 } else {
                     // const passMan = new passManager(10);
                     // password = passMan.hashPassword(password);
                     allergy = allergy.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-                    const userToUpdate = await userModel.findByIdAndUpdate(id, { name, password, allergy, updated_at: Date() }); 
+                    const userToUpdate = await userModel.findByIdAndUpdate(id, { name, email, role, password, allergy, updated_at: Date() }); 
                     if(userToUpdate) {
                         myRes.generateResponseTrue(res, 'Usuario actualizado correctamente', '');
                     } else {
